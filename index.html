@@ -12,7 +12,7 @@
     <!--Header-->
     <header>
         <ul>
-            <li>View high scores</li>
+            <li id="view-high-scores">View high scores</li>
             <li>Time: <span id="time">0</span></li>
         </ul>
     </header>
@@ -22,8 +22,8 @@
         <div>
             <p>Take this quiz to test your knowledge of Javascript.</p>
             <ul>
-                <li>There is a timer at the top right-hand corner of the screen which shows you how much time you have left to complete the quiz.</li>
                 <li>To get a high score, you need to correctly answer as many multiple-choice questions as possible in the shortest time.</li>
+                <li>The timer in the top right-hand corner of the screen shows you how much time you have left to complete the quiz.</li>
                 <li>An incorrect answer will cost you ten seconds on the clock!</li>
             </ul>
         </div>
@@ -36,8 +36,8 @@
     <!--Submit score-->
     <section id="submit-score" style="display:none">
         <h1>You're done!</h1>
-        <p>Your final score is <span id="score"></span>.</p>
-        <p>Enter your initials to save your score:</p><input placeholder="Your initials"><button id="submit-score-button">Submit</button>
+        <p>Your final score is <span id="your-score"></span>.</p>
+        <p>Enter your initials to save your score:</p><input id="your-intials" placeholder="Your initials"><button id="submit-score-button">Submit</button>
     </section>
     <!--High scores-->
     <section id="high-scores" style="display:none" >

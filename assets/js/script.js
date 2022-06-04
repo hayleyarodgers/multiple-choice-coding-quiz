@@ -44,6 +44,7 @@ var introductionEl = document.getElementById("introduction");
 var quizEl = document.getElementById("quiz");
 var submitScoreEl = document.getElementById("submit-score");
 var highScoresEl = document.getElementById("high-scores");
+var highScoresListEl = document.getElementById("high-scores-list");
 
 var questions = [
     {
@@ -54,7 +55,7 @@ var questions = [
             c: "Alerts",
             d: "Numbers"
         },
-        correctAnswer: "c"
+        correctAnswer: "Alerts"
     },
 
     {
@@ -65,7 +66,7 @@ var questions = [
             c: "Parentheses",
             d: "Square brackets"
         },
-        correctAnswer: "c"
+        correctAnswer: "Square brackets"
     },
 
     {
@@ -76,7 +77,7 @@ var questions = [
             c: "Booleans",
             d: "All of the above"
         },
-        correctAnswer: "d"
+        correctAnswer: "All of the above"
     },
 
     {
@@ -87,7 +88,7 @@ var questions = [
             c: "Quotes",
             d: "Parentheses"
         },
-        correctAnswer: "c"
+        correctAnswer: "Quotes"
     },
     
     {
@@ -98,39 +99,46 @@ var questions = [
             c: "For loops",
             d: "Console.log"
         },
-        correctAnswer: "d"
+        correctAnswer: "Console.log"
     }
 ];
 
 var userAnswer;
-var score;
+var correctAnswer;
+
+var userScore;
+var userInitials;
+var userScoreInitials;
+var userScoreEl = document.getElementById("your-score");
+var userInitialsEl = document.getElementById("your-initials");
+var highScores = [];
+var sortedHighScores = [];
 
 var startButton = document.getElementById("start-button");
 var submitButton = document.getElementById("submit-score-button");
 var backButton = document.getElementById("back-button");
 var clearButton = document.getElementById("clear-button");
+var highScoresButton = document.getElementById("view-high-scores");
 
 var timeEl = document.getElementById("time");
-var timer;
+var time;
 var secondsLeft;
 
 // When the start button is clicked, start the quiz
 startButton.addEventListener('click', startQuiz)
 
-startQuiz()
-
 // When the quiz is started, start the timer, create the question framework and give questions
 function startQuiz() {
     introductionEl.setAttribute("style", "display:none")
-    startTime();
+    startTimer();
     createQuestionFramework();
-    giveQuestions();
+    showQuestions();
 }
 
 // Start the timer
-function startTime() {
+function startTimer() {
     secondsLeft = 75;
-    timer = setInterval(function() {
+    time = setInterval(function() {
         secondsLeft--;
         timeEl.textContent = secondsLeft
       }, 1000);
@@ -147,6 +155,7 @@ var answer1El;
 var answer2El;
 var answer3El;
 var answer4El;
+var messageEl;
 
 function createQuestionFramework() {
     questionPromptEl = document.createElement("h2");
@@ -159,9 +168,11 @@ function createQuestionFramework() {
     answer2El = document.createElement("button");
     answer3El = document.createElement("button");
     answer4El = document.createElement("button");
+    messageEl = document.createElement("p");
     
     quizEl.appendChild(questionPromptEl);
     quizEl.appendChild(listEl);
+    quizEl.appendChild(messageEl);
     listEl.appendChild(li1El);
     listEl.appendChild(li2El);
     listEl.appendChild(li3El);
@@ -172,44 +183,96 @@ function createQuestionFramework() {
     li4El.appendChild(answer4El);
 }
 
-// Give questions
-function giveQuestions() {
+// Give questions and show score when done
+function showQuestions() {
     for (var i = 0; i < questions.length; i++) {
         questionPromptEl.textContent = questions[i].prompt;
         answer1El.textContent = questions[i].answers.a;
         answer2El.textContent = questions[i].answers.b;
         answer3El.textContent = questions[i].answers.c;
         answer4El.textContent = questions[i].answers.d;
-        //FLAG
-        var correctAnswerKey = questions[i].correctAnswer;
-        var correctAnswerWritten = questions[i].answers.indexOf(correctAnswerKey);
-        var correctAnswer = questions[i].answers[correctAnswerWritten];
-        quizEl.addEventListener('click', function(event, secondsLeft) {
-            userAnswer = event.target;
-            if (userAnswer == correctAnswer) {
-                correctAnswerMessage();
-            } else {
-                incorrectAnswerMessage();
-                secondsLeft = secondsLeft - 10;
-            }
-        });
+        correctAnswer = questions[i].correctAnswer;
+        quizEl.addEventListener('click', checkAnswer);
     }
+    showScore();
+}
+
+// Check if answer is correct
+function checkAnswer() {
+    quizEl.addEventListener('click', function(event, secondsLeft, correctAnswer) {
+        userAnswer = event.target;
+        if (userAnswer == correctAnswer) {
+            correctAnswerMessage();
+        } else {
+            incorrectAnswerMessage();
+            secondsLeft = secondsLeft - 10;
+        }
+    });
 }
 
 // Message to display when answer is correct
 function correctAnswerMessage() {
-    var dividerEl = document.createElement("hr");
-    var messageEl = document.createElement("p");
-    quizEl.appendChild(dividerEl);
-    quizEl.appendChild(messageEl);
+    messageEl.textContent = "";
     messageEl.textContent = "Correct!";
 }
 
 // Message to display when answer is incorrect
 function incorrectAnswerMessage() {
-    var dividerEl = document.createElement("hr");
-    var messageEl = document.createElement("p");
-    quizEl.appendChild(dividerEl);
-    quizEl.appendChild(messageEl);
+    messageEl.textContent = "";
     messageEl.textContent = "Nope!";
 }
+
+// Show the user's score
+function showScore() {
+    userScore = secondsLeft;
+    userScoreEl.textContent = userScore;
+}
+
+// Allow user to save their score
+submitButton.addEventListener('click', function(event) {
+    event.preventDefault();
+    
+    userInitials = userInitialsEl.value;
+    userScoreInitials = userScore.concat(" - ",userInitials);
+
+    if (userInitials === "") {
+        return;
+    }
+    
+    highScores.push(userScoreInitials);
+    sortedHighScores = highScores.sort();
+    userInitialsEl.value = "";
+
+    saveScore();
+    showSortedHighScores();
+})
+
+// Save score
+function saveScore () {
+    localStorage.setItem("sortedHighScores", JSON.stringify(sortedHighScores));
+}
+
+// Show list of high scores
+function showSortedHighScores() {
+    highScoresListEl.innerHTML = "";
+
+    for (var i = 0; i < sortedHighScores.length; i++) {
+        var highScore = sortedHighScores[i];
+
+        var li = document.createElement("li");
+        li.textContent = highScore;
+        highScoresListEl.appendChild(li);
+    }
+}
+
+// Show list of scores when clicked
+highScoresButton.addEventListener('click', showSortedHighScores);
+
+// Clear high scores
+clearButton.addEventListener('click', function(event) {
+    highScores = "";
+    sortedHighScores = "";
+})
+
+// Go back to introduction screen when clicked
+
