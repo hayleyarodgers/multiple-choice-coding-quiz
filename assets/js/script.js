@@ -131,26 +131,25 @@ startButton.addEventListener('click', startQuiz)
 function startQuiz() {
     introductionEl.setAttribute("style", "display:none")
     startTimer();
-    createQuestionFramework();
-    showQuestions();
+    showQuestion();
 }
 
-// Start the timer
+// Start the timer and end the quiz if timer runs out 
 function startTimer() {
     secondsLeft = 75;
     time = setInterval(function() {
         secondsLeft--;
         timeEl.textContent = secondsLeft
       }, 1000);
+    
+    if (secondsLeft === 0) {
+        showScore();
+    }
   }
 
 // Create the question framework
 var questionPromptEl;
 var listEl;
-var li1El ;
-var li2El;
-var li3El;
-var li4El;
 var answer1El;
 var answer2El;
 var answer3El;
@@ -160,59 +159,53 @@ var messageEl;
 function createQuestionFramework() {
     questionPromptEl = document.createElement("p");
     listEl = document.createElement("ol");
-    li1El = document.createElement("li");
-    li2El = document.createElement("li");
-    li3El = document.createElement("li");
-    li4El = document.createElement("li");
-    answer1El = document.createElement("button");
-    answer2El = document.createElement("button");
-    answer3El = document.createElement("button");
-    answer4El = document.createElement("button");
+    answer1El = document.createElement("li");
+    answer2El = document.createElement("li");
+    answer3El = document.createElement("li");
+    answer4El = document.createElement("li");
     messageEl = document.createElement("p");
     
     quizEl.appendChild(questionPromptEl);
     quizEl.appendChild(listEl);
     quizEl.appendChild(messageEl);
-    listEl.appendChild(li1El);
-    listEl.appendChild(li2El);
-    listEl.appendChild(li3El);
-    listEl.appendChild(li4El);
-    li1El.appendChild(answer1El);
-    li2El.appendChild(answer2El);
-    li3El.appendChild(answer3El);
-    li4El.appendChild(answer4El);
+    listEl.appendChild(answer1El);
+    listEl.appendChild(answer2El);
+    listEl.appendChild(answer3El);
+    listEl.appendChild(answer4El);
     
     answer1El.setAttribute("class", "glow");
     answer2El.setAttribute("class", "glow");
     answer3El.setAttribute("class", "glow");
     answer4El.setAttribute("class", "glow");
-
 }
 
-// Give questions and show score when done
-function showQuestions() {
+// Show question
+function showQuestion() {
     for (var i = 0; i < questions.length; i++) {
+        quizEl.innerHTML = "";
+        createQuestionFramework();
         questionPromptEl.textContent = questions[i].prompt;
         answer1El.textContent = questions[i].answers.a;
         answer2El.textContent = questions[i].answers.b;
         answer3El.textContent = questions[i].answers.c;
         answer4El.textContent = questions[i].answers.d;
         correctAnswer = questions[i].correctAnswer;
-        console.log(i);
-        console.log(answer1El.textContent);
-        console.log(correctAnswer);
-        quizEl.addEventListener('click', function (event) {
-            userAnswer = event.target;
-            console.log(userAnswer);
-            if (userAnswer == correctAnswer) {
-                correctAnswerMessage();
-            } else {
-                incorrectAnswerMessage();
-                secondsLeft = secondsLeft - 10;
-            }
-        });
     }
-    showScore();
+
+    var answers = [answer1El, answer2El, answer3El, answer4El]
+
+    answers.forEach.addEventListener('click',checkAnswer());
+}
+
+function checkAnswer(event) {
+    userAnswer = event.target;
+    console.log(userAnswer);
+    if (userAnswer == correctAnswer) {
+        correctAnswerMessage();
+    } else {
+        incorrectAnswerMessage();
+        secondsLeft = secondsLeft - 10;
+    }
 }
 
 

@@ -105,7 +105,7 @@ header li {
 
 #introduction li {
     background-color: var(--light-grey);
-    padding: 10px;
+    padding: 10px 20px;
     margin: 10px;
 }
 
@@ -116,11 +116,10 @@ header li {
     margin: 20px 0;
 }
 
-#quiz button {
+#quiz li {
     background-color: var(--light-grey);  
-    border-radius: 0;
     width: 50vw;
-    text-align: left;
+    padding: 5px 10px;
 }
 
 
