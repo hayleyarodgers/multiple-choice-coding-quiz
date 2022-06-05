@@ -17,6 +17,7 @@
     --font-main: 'Inconsolata', monospace;
     --black: #021C1D;
     --dark-orange: #FA8130;
+    --dark-grey: #909090c6;
     --light-grey: #dededea8;
     --yellow: #FAAE08;
     --blue: #2aefcb;
@@ -54,7 +55,7 @@ button {
 
 .bright-button,
 .neutral-button {
-    border: 3px solid var(--dark-orange);
+    border: 1px solid var(--dark-orange);
     width: 230px;
     font-weight: bold;
 
@@ -77,7 +78,7 @@ button {
 /* Set drop shadows to create glow effect on hover. */
 .glow:hover {
     background-image: none;
-    border: 3px solid var(--blue);
+    border: 1px solid var(--blue);
     box-shadow: 0 0 15px var(--blue);
 }
 
@@ -85,14 +86,9 @@ button {
 
 /* Define header appearance. */
 
-header ul {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-header li {
-    padding: 20px 0;
+header {
+    display: none;
+    text-align: right;
 }
 
 /* ===INTRODUCTION=== */
@@ -111,28 +107,62 @@ header li {
 
 /* ===QUIZ=== */
 
+#quiz {
+    display: none;
+}
+
 #quiz p, #quiz li {
     text-align: left;
     margin: 20px 0;
 }
 
 #quiz li {
-    background-color: var(--light-grey);  
+    background-color: var(--light-grey);
+    border: 1px solid var(--light-grey);
+    border-radius: 8px;
     width: 50vw;
     padding: 5px 10px;
 }
 
-
 /* ===SUBMIT-SCORE=== */
 
+#submit-score {
+    display: none;
+}
+
+input {
+    padding: 5px 10px;
+    height: 36px;
+    margin: 10px;
+}
 
 
 /* ===HIGH-SCORES=== */
+#high-scores {
+    display: none;
+}
+
+#high-scores li {
+    font-weight: bold;
+    background-color: var(--dark-orange);
+    width: 50vw;
+    padding: 5px 10px;
+}
+
+#high-scores button {
+    margin: 10px 0;
+}
 
 
 /* ===FOOTER=== */
+footer {
+    margin-top: 30px;
+}
 
-
+footer p {
+    font-size: 1.5rem;
+    color: var(--dark-grey);
+}
 
 /* ===VIEWPORT-RESPONSES=== */
 

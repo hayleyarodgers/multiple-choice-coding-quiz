@@ -1,8 +1,16 @@
+var headerEl = document.getElementById("header");
 var introductionEl = document.getElementById("introduction");
 var quizEl = document.getElementById("quiz");
+var questionPromptEl = document.getElementById("question-prompt");
+var answer1El = document.getElementById("answer1");
+var answer2El = document.getElementById("answer2");
+var answer3El = document.getElementById("answer3");
+var answer4El = document.getElementById("answer4");
+var questionFeedbackEl = document.getElementById("question-feedback");
 var submitScoreEl = document.getElementById("submit-score");
 var highScoresEl = document.getElementById("high-scores");
 var highScoresListEl = document.getElementById("high-scores-list");
+var footerEl = document.getElementById("footer");
 
 var questions = [
     {
@@ -24,7 +32,7 @@ var questions = [
             c: "Parentheses",
             d: "Square brackets"
         },
-        correctAnswer: "Square brackets"
+        correctAnswer: "Parentheses"
     },
 
     {
@@ -60,6 +68,7 @@ var questions = [
         correctAnswer: "Console.log"
     }
 ];
+
 var questionIndex = 0;
 
 var userAnswer;
@@ -83,14 +92,19 @@ var timeEl = document.getElementById("time");
 var time;
 var secondsLeft;
 
+
 // When the start button is clicked, start the quiz
 startButton.addEventListener('click', startQuiz)
 
 // When the quiz is started, start the timer and ask questions
 function startQuiz() {
+    headerEl.setAttribute("style", "display:block");
+    quizEl.setAttribute("style", "display:block");
     introductionEl.setAttribute("style", "display:none");
+    footerEl.setAttribute("style", "display:none");
     startTimer();
     askQuestion();
+    waitForAnswer();
 }
 
 // Start the timer and end the quiz if timer runs out 
@@ -102,82 +116,58 @@ function startTimer() {
       }, 1000);
     
     if (secondsLeft === 0) {
+        clearInterval(time);
         showScore();
     }
   }
 
-var questionPromptEl;
-var listEl;
-var answer1El;
-var answer2El;
-var answer3El;
-var answer4El;
-var answers = [answer1El, answer2El, answer3El, answer4El]
-var messageEl;
-
 // Ask questions
 function askQuestion() {
-
-    quizEl.innerHTML = "";
-
-    questionPromptEl = document.createElement("p");
-    listEl = document.createElement("ol");
-    answer1El = document.createElement("li");
-    answer2El = document.createElement("li");
-    answer3El = document.createElement("li");
-    answer4El = document.createElement("li");
-    messageEl = document.createElement("p");
-    
-    quizEl.appendChild(questionPromptEl);
-    quizEl.appendChild(listEl);
-    quizEl.appendChild(messageEl);
-    listEl.appendChild(answer1El);
-    listEl.appendChild(answer2El);
-    listEl.appendChild(answer3El);
-    listEl.appendChild(answer4El);
-    
-    answer1El.setAttribute("class", "glow");
-    answer2El.setAttribute("class", "glow");
-    answer3El.setAttribute("class", "glow");
-    answer4El.setAttribute("class", "glow");
-
     questionPromptEl.textContent = questions[questionIndex].prompt;
     answer1El.textContent = questions[questionIndex].answers.a;
     answer2El.textContent = questions[questionIndex].answers.b;
     answer3El.textContent = questions[questionIndex].answers.c;
     answer4El.textContent = questions[questionIndex].answers.d;
     correctAnswer = questions[questionIndex].correctAnswer;
+}
 
-    answers.forEach.addEventListener('click', checkAnswer);
+function waitForAnswer() {
+    var answers = [answer1El, answer2El, answer3El, answer4El];
+    answers.forEach(answer => answer.addEventListener('click',checkAnswer));
 }
 
 function checkAnswer(event) {
-    userAnswer = event.target;
-    console.log(userAnswer);
+    questionFeedbackEl.value = "";
+
+    userAnswer = event.target.innerHTML;
+
     if (userAnswer == correctAnswer) {
-        correctAnswerMessage();
+        questionFeedbackEl.textContent = "Correct!";
     } else {
-        incorrectAnswerMessage();
+        questionFeedbackEl.textContent = "Nope!";
         secondsLeft = secondsLeft - 10;
     }
 
     questionIndex++;
-    askQuestion();
-
+    endQuiz();
 }
 
-// Message to display when answer is correct
-function correctAnswerMessage() {
-    messageEl.textContent = "Correct!";
-}
-
-// Message to display when answer is incorrect
-function incorrectAnswerMessage() {
-    messageEl.textContent = "Nope!";
+// Look at how many questions are left to decide whether to continue quiz
+function endQuiz() {
+    if (questionIndex < questions.length) {
+        askQuestion();
+    } else {
+        clearInterval(time);
+        showScore();
+    }
 }
 
 // Show the user's score
 function showScore() {
+    submitScoreEl.setAttribute("style", "display:block");
+    quizEl.setAttribute("style", "display:none");
+    headerEl.setAttribute("style", "display:none");
+
     userScore = secondsLeft;
     userScoreEl.textContent = userScore;
 }
@@ -185,34 +175,55 @@ function showScore() {
 // Allow user to save their score
 submitButton.addEventListener('click', function(event) {
     event.preventDefault();
-    
-    userInitials = userInitialsEl.value;
-    userScoreInitials = userScore.concat(" - ",userInitials);
-
-    if (userInitials === "") {
-        return;
-    }
-    
-    highScores.push(userScoreInitials);
-    sortedHighScores = highScores.sort();
-    userInitialsEl.value = "";
-
-    saveScore();
+    nameScore();
+    sortScore();
+    saveSortedScores();
     showSortedHighScores();
 })
 
-// Save score
-function saveScore () {
+// Create score name
+function nameScore() {
+    userInitials = userInitialsEl.value;
+
+    if (userInitials === "") {
+        return;
+    };
+
+    userScoreInitials = userInitials + " - " + userScore;
+}
+
+// ISSUES FROM HERE ONWARDS
+// Add score to list of sorted high scores and clear initials field
+function sortScore() {
+    highScores.push(userScoreInitials);
+    sortedHighScores = highScores.sort();
+
+    userInitialsEl.value = "";
+}
+
+// Save score to the list
+function saveSortedScores() {
     localStorage.setItem("sortedHighScores", JSON.stringify(sortedHighScores));
 }
 
 // Show list of high scores
 function showSortedHighScores() {
+    highScoresEl.setAttribute("style", "display:block");
+    introductionEl.setAttribute("style", "display:none");
+    headerEl.setAttribute("style", "display:none");
+    footerEl.setAttribute("style", "display:none");
+    submitScoreEl.setAttribute("style", "display:none");
+
+    var storedHighScores = JSON.parse(localStorage.getItem("sortedHighScores"));
+
+    if (storedHighScores !== null) {
+        sortedHighScores = storedHighScores;
+      }
+
     highScoresListEl.innerHTML = "";
 
     for (var i = 0; i < sortedHighScores.length; i++) {
         var highScore = sortedHighScores[i];
-
         var li = document.createElement("li");
         li.textContent = highScore;
         highScoresListEl.appendChild(li);
@@ -222,11 +233,19 @@ function showSortedHighScores() {
 // Show list of scores when clicked; Retrieve list from local storage... (see 26)
 highScoresButton.addEventListener('click', showSortedHighScores);
 
-// Clear high scores
-clearButton.addEventListener('click', function(event) {
+// Clear high scores --> NEED TO UPDATE MEMORY
+clearButton.addEventListener('click', function() {
+    highScoresListEl.innerHTML = "No high scores to show.";
     highScores = "";
     sortedHighScores = "";
 })
 
 // Go back to introduction screen when clicked
+backButton.addEventListener('click', restartQuiz)
 
+function restartQuiz() {
+    console.log("working");
+    introductionEl.setAttribute("style", "display:block");
+    highScoresEl.setAttribute("style", "display:none");
+    questionIndex = 0;
+}

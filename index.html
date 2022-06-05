@@ -11,11 +11,8 @@
 </head>
   <body>
     <!--Header-->
-    <header>
-        <ul>
-            <li><button id="view-high-scores" class="neutral-button grow glow">View high scores</button></li>
-            <li>Time: <span id="time">0</span></li>
-        </ul>
+    <header id="header">
+        <p>Time: <span id="time">0</span></p>
     </header>
     <!--Introduction-->
     <section id="introduction">
@@ -30,27 +27,43 @@
             </ul>
         </div>
         <button id="start-button" class="bright-button grow glow">Take quiz</button>
+        <button id="view-high-scores" class="neutral-button grow glow">View high scores</button>
     </section>
     <!--Quiz-->
     <section id="quiz">
-
+        <p id="question-prompt"></p>
+        <ol>
+            <li id="answer1" class="glow"></li>
+            <li id="answer2" class="glow"></li>
+            <li id="answer3" class="glow"></li>
+            <li id="answer4" class="glow"></li>
+        </ol>
+        <p id="question-feedback"></p>
     </section>
     <!--Submit score-->
-    <section id="submit-score" style="display:none">
-        <h1>You're done!</h1>
-        <p>Your final score is <span id="your-score"></span>.</p>
-        <p>Enter your initials to save your score:</p><input id="your-intials" placeholder="Your initials"><button id="submit-score-button" class="grow glow">Submit</button>
+    <section id="submit-score">
+        <h2>You're done!</h2>
+        <br>
+        <p>Your final score is <b id="your-score"></b>.</p>
+        <br>
+        <p>Enter your initials to save your score:</p><input type="text" id="your-initials" placeholder="Your initials">
+        <button id="submit-score-button" class="bright-button grow glow">Submit</button>
+        <button id="view-high-scores" class="neutral-button grow glow">View high scores</button>
     </section>
     <!--High scores-->
-    <section id="high-scores" style="display:none" >
+    <section id="high-scores" >
+        <h2>High scores</h2>
+        <br>
         <ol id="high-scores-list"></ol>
-        <button id="back-button" class="grow glow">Go back</button>
-        <button id="clear-button" class="grow glow">Clear high scores</button>
+        <br>
+        <button id="clear-button" class="neutral-button grow glow">Clear high scores</button>
+        <button id="back-button" class="neutral-button grow glow">Go back</button>
     </section>
-    <script src="assets/js/script.js"></script>
     <!--Footer-->
-    <footer>
-
+    <footer id="footer">
+        <p><b>Made on Eora Country (Sydney, Australia).</b></p>
+        <p>I acknowledge the traditional owners of the land and pay respect to elders past, present and emerging.</p>
     </footer>
+    <script src="assets/js/script.js"></script>
   </body>
 </html>
