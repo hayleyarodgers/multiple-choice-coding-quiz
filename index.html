@@ -7,27 +7,29 @@
     <title>Javascript Quiz</title>
     <link rel="stylesheet" href="./assets/css/reset.css" />
     <link rel="stylesheet" href="./assets/css/style.css" />
-  </head>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@300;800&display=swap" rel="stylesheet">
+</head>
   <body>
     <!--Header-->
     <header>
         <ul>
-            <li id="view-high-scores">View high scores</li>
+            <li><button id="view-high-scores" class="neutral-button grow glow">View high scores</button></li>
             <li>Time: <span id="time">0</span></li>
         </ul>
     </header>
     <!--Introduction-->
-    <section id="introduction" style="display:none">
+    <section id="introduction">
         <h1>Coding Quiz</h1>
-        <div>
-            <p>Take this quiz to test your knowledge of Javascript.</p>
+        <p>Take this quiz to test your knowledge of <b>Javascript</b>.</p>
+        <div id="rules">
+            <h2>The rules</h2>
             <ul>
-                <li>To get a high score, you need to correctly answer as many multiple-choice questions as possible in the shortest time.</li>
-                <li>The timer in the top right-hand corner of the screen shows you how much time you have left to complete the quiz.</li>
-                <li>An incorrect answer will cost you ten seconds on the clock!</li>
+                <li>To get a high score, you need to <b>correctly answer</b> as many questions as possible in the <b>shortest time</b>.</li>
+                <li>The <b>timer</b> in the top right-hand corner of the screen shows you how much time you have left.</li>
+                <li>An incorrect answer will cost you <b>ten seconds</b>!</li>
             </ul>
         </div>
-        <button id="start-button">Take quiz</button>
+        <button id="start-button" class="bright-button grow glow">Take quiz</button>
     </section>
     <!--Quiz-->
     <section id="quiz">
@@ -37,13 +39,18 @@
     <section id="submit-score" style="display:none">
         <h1>You're done!</h1>
         <p>Your final score is <span id="your-score"></span>.</p>
-        <p>Enter your initials to save your score:</p><input id="your-intials" placeholder="Your initials"><button id="submit-score-button">Submit</button>
+        <p>Enter your initials to save your score:</p><input id="your-intials" placeholder="Your initials"><button id="submit-score-button" class="grow glow">Submit</button>
     </section>
     <!--High scores-->
     <section id="high-scores" style="display:none" >
-        <button id="back-button">Go back</button>
-        <button id="clear-button">Clear high scores</button>
+        <ol id="high-scores-list"></ol>
+        <button id="back-button" class="grow glow">Go back</button>
+        <button id="clear-button" class="grow glow">Clear high scores</button>
     </section>
     <script src="assets/js/script.js"></script>
+    <!--Footer-->
+    <footer>
+
+    </footer>
   </body>
 </html>

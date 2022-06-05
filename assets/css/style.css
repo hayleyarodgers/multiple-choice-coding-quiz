@@ -1,0 +1,155 @@
+/* CSS DIRECTORY
+    1. =GLOBAL
+    2. =HEADER
+    3. =INTRODUCTION
+    4. =QUIZ
+    5. =SUBMIT-SCORE
+    6. =HIGH-SCORES
+    7. =FOOTER
+    8. =VIEWPORT-RESPONSES
+*/
+
+/* ===GLOBAL=== */
+
+/* Set font and color scheme. */
+:root {
+    font-size: 62.5%;
+    --font-main: 'Inconsolata', monospace;
+    --black: #021C1D;
+    --dark-orange: #FA8130;
+    --light-grey: #dededea8;
+    --yellow: #FAAE08;
+    --blue: #2aefcb;
+    --white: white;
+    --off-white: #FDF1E1;
+}
+
+body {
+    color: var(--black);
+    font-family: var(--font-main);
+    font-weight: 300;
+    font-size: 2rem;
+    line-height: 1.5;
+    text-align: center;
+    margin: 0 25vw;
+}
+
+h1 {
+    font-weight: 800;
+    font-size: 5rem;
+}
+
+h2 {
+    font-weight: 800;
+    font-size: 3rem;
+}
+
+/* Remove all button styling */
+button {
+    background-color: var(--white);
+    border: none;
+    border-radius: 8px;
+    padding: 8px 15px;
+}
+
+.bright-button,
+.neutral-button {
+    border: 3px solid var(--dark-orange);
+    width: 230px;
+    font-weight: bold;
+
+}
+
+.bright-button {
+    background-image: linear-gradient(var(--dark-orange),var(--yellow));
+    margin: 20px 0;
+}
+
+/* Set scale to create pulse effect on hover. */
+.grow { 
+    transition: all .2s ease-in-out; 
+}
+    
+.grow:hover { 
+    transform: scale(1.1); 
+}
+
+/* Set drop shadows to create glow effect on hover. */
+.glow:hover {
+    background-image: none;
+    border: 3px solid var(--blue);
+    box-shadow: 0 0 15px var(--blue);
+}
+
+/* ===HEADER=== */
+
+/* Define header appearance. */
+
+header ul {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header li {
+    padding: 20px 0;
+}
+
+/* ===INTRODUCTION=== */
+
+/*  */
+
+#introduction p {
+    padding: 20px;
+}
+
+#introduction li {
+    background-color: var(--light-grey);
+    padding: 10px;
+    margin: 10px;
+}
+
+/* ===QUIZ=== */
+
+#quiz p, #quiz li {
+    text-align: left;
+    margin: 20px 0;
+}
+
+#quiz button {
+    background-color: var(--light-grey);  
+    border-radius: 0;
+    width: 50vw;
+    text-align: left;
+}
+
+
+/* ===SUBMIT-SCORE=== */
+
+
+
+/* ===HIGH-SCORES=== */
+
+
+/* ===FOOTER=== */
+
+
+
+/* ===VIEWPORT-RESPONSES=== */
+
+/* Tablets -  */
+@media screen and (max-width: 992px) {
+    
+  }
+  
+/* Large smartphones -  */
+@media screen and (max-width: 768px) {
+    
+}
+  
+/* Small smartphones - Reduce size of all text. */
+@media screen and (max-width: 576px) {
+    :root {
+        font-size: 50%;
+    }
+}

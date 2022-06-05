@@ -158,7 +158,7 @@ var answer4El;
 var messageEl;
 
 function createQuestionFramework() {
-    questionPromptEl = document.createElement("h2");
+    questionPromptEl = document.createElement("p");
     listEl = document.createElement("ol");
     li1El = document.createElement("li");
     li2El = document.createElement("li");
@@ -181,6 +181,12 @@ function createQuestionFramework() {
     li2El.appendChild(answer2El);
     li3El.appendChild(answer3El);
     li4El.appendChild(answer4El);
+    
+    answer1El.setAttribute("class", "glow");
+    answer2El.setAttribute("class", "glow");
+    answer3El.setAttribute("class", "glow");
+    answer4El.setAttribute("class", "glow");
+
 }
 
 // Give questions and show score when done
@@ -192,23 +198,23 @@ function showQuestions() {
         answer3El.textContent = questions[i].answers.c;
         answer4El.textContent = questions[i].answers.d;
         correctAnswer = questions[i].correctAnswer;
-        quizEl.addEventListener('click', checkAnswer);
+        console.log(i);
+        console.log(answer1El.textContent);
+        console.log(correctAnswer);
+        quizEl.addEventListener('click', function (event) {
+            userAnswer = event.target;
+            console.log(userAnswer);
+            if (userAnswer == correctAnswer) {
+                correctAnswerMessage();
+            } else {
+                incorrectAnswerMessage();
+                secondsLeft = secondsLeft - 10;
+            }
+        });
     }
     showScore();
 }
 
-// Check if answer is correct
-function checkAnswer() {
-    quizEl.addEventListener('click', function(event, secondsLeft, correctAnswer) {
-        userAnswer = event.target;
-        if (userAnswer == correctAnswer) {
-            correctAnswerMessage();
-        } else {
-            incorrectAnswerMessage();
-            secondsLeft = secondsLeft - 10;
-        }
-    });
-}
 
 // Message to display when answer is correct
 function correctAnswerMessage() {
