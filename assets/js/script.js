@@ -1,45 +1,3 @@
-// WELCOME
-
-/*
- 
-Button (see 13)
-Can have welcome written in HTML and then get fields to clear when function for quiz starts?
-
-*/
-
-// QUESTIONS 
-
-/* 
-
-Timer interval running at the top right (see 9)
-Question = heading, answers = list items = buttons (see 8)
-Use data attributes to show which answer is correct (see 20)
-Line break and response (see 13) 
-Wrong answer = decrease time by 10 seconds
-
-*/
-
-// SUBMIT SCORE 
-
-/* 
-
-HTML form with inputs (see 13)
-Add to local storage object? (see 23)
-Actually add to local storage list (see 26)
-
-*/
-
-// VIEW SCORES 
-
-/* 
-
-Retrieve list from local storage... (see 26)
-
-*/
-
-
-
-
 var introductionEl = document.getElementById("introduction");
 var quizEl = document.getElementById("quiz");
 var submitScoreEl = document.getElementById("submit-score");
@@ -102,6 +60,7 @@ var questions = [
         correctAnswer: "Console.log"
     }
 ];
+var questionIndex = 0;
 
 var userAnswer;
 var correctAnswer;
@@ -127,11 +86,11 @@ var secondsLeft;
 // When the start button is clicked, start the quiz
 startButton.addEventListener('click', startQuiz)
 
-// When the quiz is started, start the timer, create the question framework and give questions
+// When the quiz is started, start the timer and ask questions
 function startQuiz() {
-    introductionEl.setAttribute("style", "display:none")
+    introductionEl.setAttribute("style", "display:none");
     startTimer();
-    showQuestion();
+    askQuestion();
 }
 
 // Start the timer and end the quiz if timer runs out 
@@ -147,16 +106,20 @@ function startTimer() {
     }
   }
 
-// Create the question framework
 var questionPromptEl;
 var listEl;
 var answer1El;
 var answer2El;
 var answer3El;
 var answer4El;
+var answers = [answer1El, answer2El, answer3El, answer4El]
 var messageEl;
 
-function createQuestionFramework() {
+// Ask questions
+function askQuestion() {
+
+    quizEl.innerHTML = "";
+
     questionPromptEl = document.createElement("p");
     listEl = document.createElement("ol");
     answer1El = document.createElement("li");
@@ -177,24 +140,15 @@ function createQuestionFramework() {
     answer2El.setAttribute("class", "glow");
     answer3El.setAttribute("class", "glow");
     answer4El.setAttribute("class", "glow");
-}
 
-// Show question
-function showQuestion() {
-    for (var i = 0; i < questions.length; i++) {
-        quizEl.innerHTML = "";
-        createQuestionFramework();
-        questionPromptEl.textContent = questions[i].prompt;
-        answer1El.textContent = questions[i].answers.a;
-        answer2El.textContent = questions[i].answers.b;
-        answer3El.textContent = questions[i].answers.c;
-        answer4El.textContent = questions[i].answers.d;
-        correctAnswer = questions[i].correctAnswer;
-    }
+    questionPromptEl.textContent = questions[questionIndex].prompt;
+    answer1El.textContent = questions[questionIndex].answers.a;
+    answer2El.textContent = questions[questionIndex].answers.b;
+    answer3El.textContent = questions[questionIndex].answers.c;
+    answer4El.textContent = questions[questionIndex].answers.d;
+    correctAnswer = questions[questionIndex].correctAnswer;
 
-    var answers = [answer1El, answer2El, answer3El, answer4El]
-
-    answers.forEach.addEventListener('click',checkAnswer());
+    answers.forEach.addEventListener('click', checkAnswer);
 }
 
 function checkAnswer(event) {
@@ -206,18 +160,19 @@ function checkAnswer(event) {
         incorrectAnswerMessage();
         secondsLeft = secondsLeft - 10;
     }
-}
 
+    questionIndex++;
+    askQuestion();
+
+}
 
 // Message to display when answer is correct
 function correctAnswerMessage() {
-    messageEl.textContent = "";
     messageEl.textContent = "Correct!";
 }
 
 // Message to display when answer is incorrect
 function incorrectAnswerMessage() {
-    messageEl.textContent = "";
     messageEl.textContent = "Nope!";
 }
 
@@ -264,7 +219,7 @@ function showSortedHighScores() {
     }
 }
 
-// Show list of scores when clicked
+// Show list of scores when clicked; Retrieve list from local storage... (see 26)
 highScoresButton.addEventListener('click', showSortedHighScores);
 
 // Clear high scores
