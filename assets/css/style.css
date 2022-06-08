@@ -11,7 +11,7 @@
 
 /* ===GLOBAL=== */
 
-/* Set font and color scheme. */
+/* Set font and color scheme */
 :root {
     font-size: 62.5%;
     --font-main: 'Inconsolata', monospace;
@@ -22,7 +22,6 @@
     --yellow: #FAAE08;
     --blue: #2aefcb;
     --white: white;
-    --off-white: #FDF1E1;
 }
 
 body {
@@ -45,7 +44,7 @@ h2 {
     font-size: 3rem;
 }
 
-/* Remove all button styling */
+/* Set button styling. */
 button {
     background-color: var(--white);
     border: none;
@@ -84,16 +83,12 @@ button {
 
 /* ===HEADER=== */
 
-/* Define header appearance. */
-
 header {
     display: none;
     text-align: right;
 }
 
 /* ===INTRODUCTION=== */
-
-/*  */
 
 #introduction p {
     padding: 20px;
@@ -136,7 +131,6 @@ input {
     margin: 10px;
 }
 
-
 /* ===HIGH-SCORES=== */
 #high-scores {
     display: none;
@@ -155,8 +149,8 @@ input {
     padding: 5px 10px;
 }
 
-
 /* ===FOOTER=== */
+
 footer {
     margin-top: 30px;
 }
@@ -167,20 +161,22 @@ footer p {
 }
 
 /* ===VIEWPORT-RESPONSES=== */
-
-/* Tablets -  */
-@media screen and (max-width: 992px) {
-    
-  }
   
-/* Large smartphones -  */
-@media screen and (max-width: 768px) {
-    
-}
-  
-/* Small smartphones - Reduce size of all text. */
+/* Small smartphones - reduce size of all text and adjust sizing. */
 @media screen and (max-width: 576px) {
     :root {
         font-size: 50%;
+    }
+
+    body {
+        margin: 0 10vw;
+    }
+
+    button, .bright-button, .neutral-button {
+        width: 50vw;
+    }
+
+    #quiz li, #high-scores li {
+        width: 80vw;
     }
 }
