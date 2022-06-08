@@ -179,34 +179,40 @@ function showScore() {
 submitButton.addEventListener('click', function(event) {
     event.preventDefault();
     nameScore();
-    sortScore();
-    saveSortedScores();
     showSortedHighScores();
 })
 
-// Create score name
+// Create the score's name using user's initials and score
 function nameScore() {
     userInitials = userInitialsEl.value;
 
     if (userInitials === "") {
         return;
+    } else {
+        userScoreInitials = userScore + " - " + userInitials;
+        sortScore();
+        saveSortedScores();
     };
 
-    userScoreInitials = userScore + " - " + userInitials;
 }
 
-// Add score to list of sorted high scores and clear initials field
+// Add user's score to list of high scores and sort the list
 function sortScore() {
-    localStorage.setItem("sortedHighScores", JSON.stringify(sortedHighScores));
+    var storedScores = JSON.parse(localStorage.getItem("sortedHighScores"));
 
-    highScores.push(userScoreInitials);
-
-    sortedHighScores = highScores.sort().reverse();
+    if (storedScores === null) {
+        sortedHighScores = [userScoreInitials];
+    } else {
+        highScores = storedScores;
+        highScores.push(userScoreInitials);
+        sortedHighScores = highScores.sort().reverse();
+    }
 
     userInitialsEl.value = "";
+
 }
 
-// Save score to the list
+// Save users score to list of high scores in local storage
 function saveSortedScores() {
     localStorage.setItem("sortedHighScores", JSON.stringify(sortedHighScores));
 }
@@ -231,18 +237,17 @@ function showSortedHighScores() {
       }
 
     for (var i = 0; i < sortedHighScores.length; i++) {
-        var highScore = sortedHighScores[i];
+        var score = sortedHighScores[i];
         var li = document.createElement("li");
-        li.textContent = highScore;
+        li.textContent = score;
         highScoresListEl.appendChild(li);
     }
 }
 
-// Show list of scores when clicked; Retrieve list from local storage... (see 26)
+// Show list of scores when clicked
 highScoresButton.addEventListener('click', showSortedHighScores);
 
-//FLAG
-// Clear high scores --> NEED TO UPDATE MEMORY INSTEAD
+// Clear scores
 clearButton.addEventListener('click', function() {
     highScoresListEl.innerHTML = "No high scores to show.";
     highScores = "";
