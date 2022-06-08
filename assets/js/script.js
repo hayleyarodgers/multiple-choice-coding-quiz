@@ -84,7 +84,8 @@ var sortedHighScores = [];
 
 var startButton = document.getElementById("start-button");
 var submitButton = document.getElementById("submit-score-button");
-var backButton = document.getElementById("back-button");
+var submitBackButton = document.getElementById("submit-back-button");
+var highScoresBackButton = document.getElementById("high-scores-back-button");
 var clearButton = document.getElementById("clear-button");
 var highScoresButton = document.getElementById("view-high-scores");
 
@@ -113,12 +114,14 @@ function startTimer() {
     time = setInterval(function() {
         secondsLeft--;
         timeEl.textContent = secondsLeft
-      }, 1000);
+
+        if (secondsLeft === 0) {
+            console.log("hm");
+            clearInterval(time);
+            showScore();
+        }
     
-    if (secondsLeft === 0) {
-        clearInterval(time);
-        showScore();
-    }
+    }, 1000);
   }
 
 // Ask questions
@@ -189,14 +192,16 @@ function nameScore() {
         return;
     };
 
-    userScoreInitials = userInitials + " - " + userScore;
+    userScoreInitials = userScore + " - " + userInitials;
 }
 
-// ISSUES FROM HERE ONWARDS
 // Add score to list of sorted high scores and clear initials field
 function sortScore() {
+    localStorage.setItem("sortedHighScores", JSON.stringify(sortedHighScores));
+
     highScores.push(userScoreInitials);
-    sortedHighScores = highScores.sort();
+
+    sortedHighScores = highScores.sort().reverse();
 
     userInitialsEl.value = "";
 }
@@ -214,13 +219,16 @@ function showSortedHighScores() {
     footerEl.setAttribute("style", "display:none");
     submitScoreEl.setAttribute("style", "display:none");
 
-    var storedHighScores = JSON.parse(localStorage.getItem("sortedHighScores"));
-
-    if (storedHighScores !== null) {
-        sortedHighScores = storedHighScores;
-      }
+    var storedScores = JSON.parse(localStorage.getItem("sortedHighScores"));
 
     highScoresListEl.innerHTML = "";
+
+    if (storedScores !== null) {
+        sortedHighScores = storedScores;
+      }
+      else {
+        highScoresListEl.innerHTML = "No high scores to show.";
+      }
 
     for (var i = 0; i < sortedHighScores.length; i++) {
         var highScore = sortedHighScores[i];
@@ -233,19 +241,24 @@ function showSortedHighScores() {
 // Show list of scores when clicked; Retrieve list from local storage... (see 26)
 highScoresButton.addEventListener('click', showSortedHighScores);
 
-// Clear high scores --> NEED TO UPDATE MEMORY
+//FLAG
+// Clear high scores --> NEED TO UPDATE MEMORY INSTEAD
 clearButton.addEventListener('click', function() {
     highScoresListEl.innerHTML = "No high scores to show.";
     highScores = "";
     sortedHighScores = "";
+    localStorage.clear();
 })
 
 // Go back to introduction screen when clicked
-backButton.addEventListener('click', restartQuiz)
+submitBackButton.addEventListener('click', restartQuiz)
+
+highScoresBackButton.addEventListener('click', restartQuiz)
 
 function restartQuiz() {
-    console.log("working");
     introductionEl.setAttribute("style", "display:block");
+    footerEl.setAttribute("style", "display:block");
+    submitScoreEl.setAttribute("style", "display:none");
     highScoresEl.setAttribute("style", "display:none");
     questionIndex = 0;
 }
