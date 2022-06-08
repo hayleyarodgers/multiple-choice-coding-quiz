@@ -1,3 +1,15 @@
+/* JS DIRECTORY
+    1. =VARIABLES
+    2. =START-QUIZ
+    3. =DURING-QUIZ
+    4. =AFTER-QUIZ
+    5. =RESTART-QUIZ
+*/
+
+
+/* ===VARIABLES=== */
+
+// Section element variables
 var headerEl = document.getElementById("header");
 var introductionEl = document.getElementById("introduction");
 var quizEl = document.getElementById("quiz");
@@ -12,6 +24,16 @@ var highScoresEl = document.getElementById("high-scores");
 var highScoresListEl = document.getElementById("high-scores-list");
 var footerEl = document.getElementById("footer");
 
+// Button element variables
+var startButton = document.getElementById("start-button");
+var submitButton = document.getElementById("submit-score-button");
+var submitBackButton = document.getElementById("submit-back-button");
+var highScoresBackButton = document.getElementById("high-scores-back-button");
+var clearButton = document.getElementById("clear-button");
+var highScoresButton = document.getElementById("view-high-scores");
+
+// Question-related variables
+var questionIndex = 0;
 var questions = [
     {
         prompt: "What is NOT a commonly used data type?",
@@ -68,12 +90,15 @@ var questions = [
         correctAnswer: "Console.log"
     }
 ];
-
-var questionIndex = 0;
-
 var userAnswer;
 var correctAnswer;
 
+// Timer-related variables
+var timeEl = document.getElementById("time");
+var time;
+var secondsLeft;
+
+// Score-related variables
 var userScore;
 var userInitials;
 var userScoreInitials;
@@ -82,22 +107,13 @@ var userInitialsEl = document.getElementById("your-initials");
 var highScores = [];
 var sortedHighScores = [];
 
-var startButton = document.getElementById("start-button");
-var submitButton = document.getElementById("submit-score-button");
-var submitBackButton = document.getElementById("submit-back-button");
-var highScoresBackButton = document.getElementById("high-scores-back-button");
-var clearButton = document.getElementById("clear-button");
-var highScoresButton = document.getElementById("view-high-scores");
 
-var timeEl = document.getElementById("time");
-var time;
-var secondsLeft;
-
+/* ===START-QUIZ=== */
 
 // When the start button is clicked, start the quiz
 startButton.addEventListener('click', startQuiz)
 
-// When the quiz is started, start the timer and ask questions
+// When the quiz is started, start the timer and begin asking questions
 function startQuiz() {
     headerEl.setAttribute("style", "display:block");
     quizEl.setAttribute("style", "display:block");
@@ -108,6 +124,9 @@ function startQuiz() {
     waitForAnswer();
 }
 
+
+/* ===DURING-QUIZ=== */
+
 // Start the timer and end the quiz if timer runs out 
 function startTimer() {
     secondsLeft = 75;
@@ -116,15 +135,13 @@ function startTimer() {
         timeEl.textContent = secondsLeft
 
         if (secondsLeft === 0) {
-            console.log("hm");
             clearInterval(time);
             showScore();
         }
-    
     }, 1000);
   }
 
-// Ask questions
+// Ask a question
 function askQuestion() {
     questionPromptEl.textContent = questions[questionIndex].prompt;
     answer1El.textContent = questions[questionIndex].answers.a;
@@ -134,17 +151,19 @@ function askQuestion() {
     correctAnswer = questions[questionIndex].correctAnswer;
 }
 
+// When user selects an answer, check if the answer is correct
 function waitForAnswer() {
     var answers = [answer1El, answer2El, answer3El, answer4El];
     answers.forEach(answer => answer.addEventListener('click',checkAnswer));
 }
 
+// Check if the user's answer is correct
 function checkAnswer(event) {
     questionFeedbackEl.value = "";
 
     userAnswer = event.target.innerHTML;
 
-    if (userAnswer == correctAnswer) {
+    if (userAnswer === correctAnswer) {
         questionFeedbackEl.textContent = "Correct!";
     } else {
         questionFeedbackEl.textContent = "Nope!";
@@ -165,7 +184,10 @@ function endQuiz() {
     }
 }
 
-// Show the user's score
+
+/* ===AFTER-QUIZ=== */
+
+// Show user their score
 function showScore() {
     submitScoreEl.setAttribute("style", "display:block");
     quizEl.setAttribute("style", "display:none");
@@ -182,7 +204,7 @@ submitButton.addEventListener('click', function(event) {
     showSortedHighScores();
 })
 
-// Create the score's name using user's initials and score
+// Create user score's name using user's initials and score
 function nameScore() {
     userInitials = userInitialsEl.value;
 
@@ -196,7 +218,7 @@ function nameScore() {
 
 }
 
-// Add user's score to list of high scores and sort the list
+// Add user's score to sorted list of high scores
 function sortScore() {
     var storedScores = JSON.parse(localStorage.getItem("sortedHighScores"));
 
@@ -209,10 +231,9 @@ function sortScore() {
     }
 
     userInitialsEl.value = "";
-
 }
 
-// Save users score to list of high scores in local storage
+// Save user's score in list of high scores in local storage
 function saveSortedScores() {
     localStorage.setItem("sortedHighScores", JSON.stringify(sortedHighScores));
 }
@@ -233,7 +254,7 @@ function showSortedHighScores() {
         sortedHighScores = storedScores;
       }
       else {
-        highScoresListEl.innerHTML = "No high scores to show.";
+        highScoresListEl.innerHTML = "No scores to show.";
       }
 
     for (var i = 0; i < sortedHighScores.length; i++) {
@@ -247,7 +268,7 @@ function showSortedHighScores() {
 // Show list of scores when clicked
 highScoresButton.addEventListener('click', showSortedHighScores);
 
-// Clear scores
+// Clear list of scores when clicked
 clearButton.addEventListener('click', function() {
     highScoresListEl.innerHTML = "No high scores to show.";
     highScores = "";
@@ -255,7 +276,9 @@ clearButton.addEventListener('click', function() {
     localStorage.clear();
 })
 
-// Go back to introduction screen when clicked
+
+/* ===RESTART-QUIZ=== */
+
 submitBackButton.addEventListener('click', restartQuiz)
 
 highScoresBackButton.addEventListener('click', restartQuiz)
