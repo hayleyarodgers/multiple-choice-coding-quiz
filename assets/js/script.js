@@ -11,6 +11,7 @@
 
 // Section element variables
 var headerEl = document.getElementById("header");
+var timeEl = document.getElementById("time");
 var introductionEl = document.getElementById("introduction");
 var quizEl = document.getElementById("quiz");
 var questionPromptEl = document.getElementById("question-prompt");
@@ -19,6 +20,8 @@ var answer2El = document.getElementById("answer2");
 var answer3El = document.getElementById("answer3");
 var answer4El = document.getElementById("answer4");
 var questionFeedbackEl = document.getElementById("question-feedback");
+var userScoreEl = document.getElementById("your-score");
+var userInitialsEl = document.getElementById("your-initials");
 var submitScoreEl = document.getElementById("submit-score");
 var highScoresEl = document.getElementById("high-scores");
 var highScoresListEl = document.getElementById("high-scores-list");
@@ -28,9 +31,9 @@ var footerEl = document.getElementById("footer");
 var startButton = document.getElementById("start-button");
 var submitButton = document.getElementById("submit-score-button");
 var submitBackButton = document.getElementById("submit-back-button");
+var highScoresButton = document.getElementById("view-high-scores");
 var highScoresBackButton = document.getElementById("high-scores-back-button");
 var clearButton = document.getElementById("clear-button");
-var highScoresButton = document.getElementById("view-high-scores");
 
 // Question-related variables
 var questionIndex = 0;
@@ -94,7 +97,6 @@ var userAnswer;
 var correctAnswer;
 
 // Timer-related variables
-var timeEl = document.getElementById("time");
 var time;
 var secondsLeft;
 
@@ -102,18 +104,16 @@ var secondsLeft;
 var userScore;
 var userInitials;
 var userScoreInitials;
-var userScoreEl = document.getElementById("your-score");
-var userInitialsEl = document.getElementById("your-initials");
 var highScores = [];
 var sortedHighScores = [];
 
 
 /* ===START-QUIZ=== */
 
-// When the start button is clicked, start the quiz
+// When start button is clicked, start quiz
 startButton.addEventListener('click', startQuiz)
 
-// When the quiz is started, start the timer and begin asking questions
+// When quiz is started, start timer and begin asking questions
 function startQuiz() {
     headerEl.setAttribute("style", "display:block");
     quizEl.setAttribute("style", "display:block");
@@ -127,12 +127,12 @@ function startQuiz() {
 
 /* ===DURING-QUIZ=== */
 
-// Start the timer and end the quiz if timer runs out 
+// Start timer and end quiz if timer runs out 
 function startTimer() {
     secondsLeft = 75;
     time = setInterval(function() {
         secondsLeft--;
-        timeEl.textContent = secondsLeft
+        timeEl.textContent = secondsLeft;
 
         if (secondsLeft === 0) {
             clearInterval(time);
@@ -151,15 +151,15 @@ function askQuestion() {
     correctAnswer = questions[questionIndex].correctAnswer;
 }
 
-// When user selects an answer, check if the answer is correct
+// When user selects an answer, check if their answer is correct
 function waitForAnswer() {
     var answers = [answer1El, answer2El, answer3El, answer4El];
     answers.forEach(answer => answer.addEventListener('click',checkAnswer));
 }
 
-// Check if the user's answer is correct
+// Check if user's answer is correct
 function checkAnswer(event) {
-    questionFeedbackEl.value = "";
+    questionFeedbackEl.textContent = "";
 
     userAnswer = event.target.innerHTML;
 
@@ -179,6 +179,7 @@ function endQuiz() {
     if (questionIndex < questions.length) {
         askQuestion();
     } else {
+        questionFeedbackEl.textContent = "";
         clearInterval(time);
         showScore();
     }
@@ -204,7 +205,7 @@ submitButton.addEventListener('click', function(event) {
     showSortedHighScores();
 })
 
-// Create user score's name using user's initials and score
+// Create user's score name using their initials and score
 function nameScore() {
     userInitials = userInitialsEl.value;
 
@@ -270,7 +271,7 @@ highScoresButton.addEventListener('click', showSortedHighScores);
 
 // Clear list of scores when clicked
 clearButton.addEventListener('click', function() {
-    highScoresListEl.innerHTML = "No high scores to show.";
+    highScoresListEl.innerHTML = "No scores to show.";
     highScores = "";
     sortedHighScores = "";
     localStorage.clear();
